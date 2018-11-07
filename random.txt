@@ -1,0 +1,10 @@
+spotify-this-song,"I Want it That Way"
+
+Commands to allow:
+* `concert-this`
+
+* `spotify-this-song`
+
+* `movie-this`
+
+* `do-what-it-says`
