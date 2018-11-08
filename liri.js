@@ -1,6 +1,7 @@
 require("dotenv").config();
 const Spotify = require('node-spotify-api');
 const Request = require('request');
+const Moment = require('moment');
 const keys = require('./keys.js');
 
 const command = process.argv[2];
@@ -12,9 +13,6 @@ var spotify = new Spotify({
   secret: keys.spotify.secret
 }); 
 
-
-
-console.log(keys);
 console.log(command);
 
 if(command === 'spotify-this-song') {
@@ -25,7 +23,7 @@ if(command === 'spotify-this-song') {
       return console.log('Error occurred: ' + err);
     }
 
-    console.log(data.tracks.items);
+    //console.log(data.tracks.items);
     if(data.tracks.items.length === 0) {
       console.log('No track found with provided name.');
       return;
@@ -38,9 +36,8 @@ if(command === 'spotify-this-song') {
   if(!searchPhrase) searchPhrase = 'Tycho';
   
   Request('https://rest.bandsintown.com/artists/' + searchPhrase + '/events?app_id=codingbootcamp', function (error, response, body) {
-  console.log('error:', error); // Print the error if one occurred
-  console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-  //console.log('body:', body); // Print the HTML for the Google homepage.
+    if(error && response.statusCode !== 200) return;
+    printConcerts(JSON.parse(body));
 });
 }
  
@@ -53,5 +50,16 @@ function printSpotifyTracks(tracks) {
     console.log(currentTrack.artists[0].name);
     console.log(currentTrack.album.name);
     console.log('');  
+  }
+}
+
+function printConcerts(concerts) {
+  for(let i = 0; i < concerts.length; i++) {
+    let concert = concerts[i];
+    let date = Moment(concert.datetime);
+    console.log(concert.venue.name);
+    console.log(concert.venue.city + ', ' + concert.venue.region + ' ' + concert.venue.country);
+    console.log(date.format('MM/DD/YYYY'));
+    console.log('');
   }
 }
