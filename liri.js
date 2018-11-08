@@ -23,7 +23,6 @@ if(command === 'spotify-this-song') {
       return console.log('Error occurred: ' + err);
     }
 
-    //console.log(data.tracks.items);
     if(data.tracks.items.length === 0) {
       console.log('No track found with provided name.');
       return;
@@ -37,8 +36,25 @@ if(command === 'spotify-this-song') {
   
   Request('https://rest.bandsintown.com/artists/' + searchPhrase + '/events?app_id=codingbootcamp', function (error, response, body) {
     if(error && response.statusCode !== 200) return;
-    printConcerts(JSON.parse(body));
-});
+    if( /warn=Not found/g.test(body) || /error=Not Found/g.test(body)) {
+      console.log('Artist not found.');
+    } else {
+      printConcerts(JSON.parse(body));
+    }
+  });
+} else if (command === 'movie-this') {
+  if(!searchPhrase) searchPhrase = 'Mr. Nobody';
+
+  Request('http://www.omdbapi.com/?apikey=trilogy&t=' + searchPhrase, function(error, response, body) {
+    if(error && response.statusCode !== 200) return;
+    let data = JSON.parse(body);
+    if(data.Response === 'False') {
+      console.log('Movie not found');
+    } else {
+      printMovie(data);
+    }
+
+  })
 }
  
 
@@ -46,9 +62,9 @@ if(command === 'spotify-this-song') {
 function printSpotifyTracks(tracks) {
   for(let i = 0; i < tracks.length; i++) {
     let currentTrack = tracks[i];
-    console.log(currentTrack.name);
-    console.log(currentTrack.artists[0].name);
-    console.log(currentTrack.album.name);
+    console.log('Name:   ' + currentTrack.name);
+    console.log('Artist: ' + currentTrack.artists[0].name);
+    console.log('Album:  ' + currentTrack.album.name);
     console.log('');  
   }
 }
@@ -57,9 +73,31 @@ function printConcerts(concerts) {
   for(let i = 0; i < concerts.length; i++) {
     let concert = concerts[i];
     let date = Moment(concert.datetime);
-    console.log(concert.venue.name);
-    console.log(concert.venue.city + ', ' + concert.venue.region + ' ' + concert.venue.country);
-    console.log(date.format('MM/DD/YYYY'));
+    let lineup = '';
+    concert.lineup.forEach((b, i, arr) => {
+      
+      if(i === arr.length - 1) {
+        lineup += b;
+      } else  {
+        lineup += b + ', ';
+      }
+      
+    })
+    console.log('Lineup:   ' + lineup);
+    console.log('Venue:    ' + concert.venue.name);
+    console.log('Location: '+ concert.venue.city + ', ' + concert.venue.region + ' ' + concert.venue.country);
+    console.log('Date:     ' + date.format('MM/DD/YYYY'));
     console.log('');
   }
+}
+
+function printMovie(movie) {
+  console.log('Title:    ' + movie.Title);
+  console.log('Year:     ' + movie.Year);
+  console.log('IMDB:     ' + movie.imdbRating);
+  console.log('RT:       ' + (movie.Ratings.filter(e => e.Source === 'Rotten Tomatoes'))[0].Value);
+  console.log('Country:  ' + movie.Country);
+  console.log('Language: ' + movie.Language);
+  console.log('Plot:     ' + movie.Plot);
+  console.log('Actors:   ' + movie.Actors);
 }

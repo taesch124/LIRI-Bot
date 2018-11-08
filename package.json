@@ -1,0 +1,26 @@
+{
+  "name": "homework-07_liribot",
+  "version": "1.0.0",
+  "description": "node program that makes calls to API's for movie, concert, and song searches.",
+  "main": "keys.js",
+  "dependencies": {
+    "dotenv": "^6.1.0",
+    "moment": "^2.22.2",
+    "node-spotify-api": "^1.0.7",
+    "request": "^2.88.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/taesch124/LIRI-Bot.git"
+  },
+  "author": "Daniel Taeschler",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/taesch124/LIRI-Bot/issues"
+  },
+  "homepage": "https://github.com/taesch124/LIRI-Bot#readme"
+}
