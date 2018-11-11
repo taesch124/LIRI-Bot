@@ -1,6 +1,6 @@
 # LIRI-Bot
 
-LIRI is a command line application that prompts the user for inputs to search for movies, songs, and concerts based on a search phrase provided by the user. The application prompts the user for what they are searching for, or if they just want LIRI to run a random command from a provided list. Each command is described in further detail below. The starting prompt looks like the below ![Image of user prompt](assets/images/application-flow/user-prompt.png)
+LIRI is a command line application that prompts the user for inputs to search for movies, songs, and concerts based on a search phrase provided by the user. The application prompts the user for what they are searching for, or if they just want LIRI to run a random command from a provided list. Each command is described in further detail below. The starting prompt looks like the below ![Image of user prompt](./assets/images/application-flow/user-prompt.png)
 
 ## Search Songs
 
