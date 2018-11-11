@@ -1,10 +1,7 @@
-spotify-this-song,"I Want it That Way"
-
-Commands to allow:
-* `concert-this`
-
-* `spotify-this-song`
-
-* `movie-this`
-
-* `do-what-it-says`
+spotify-this-song,I Want it That Way
+movie-this,Princess Mononoke
+concert-this,Tycho
+concert-this,Drake
+movie-this,The Matrix
+movie-this,Thor: Ragnarok
+spotify-this-song,Like a Rolling Stone

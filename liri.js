@@ -2,10 +2,9 @@ require("dotenv").config();
 const Spotify = require('node-spotify-api');
 const Request = require('request');
 const Moment = require('moment');
+const Inquirer = require('inquirer');
 const keys = require('./keys.js');
-
-const command = process.argv[2];
-let searchPhrase = process.argv[3];
+const fs = require('fs');
 
 //Initialize APIs
 var spotify = new Spotify({
@@ -13,67 +12,119 @@ var spotify = new Spotify({
   secret: keys.spotify.secret
 }); 
 
-console.log(command);
+promptUser();
 
-if(command === 'spotify-this-song') {
-  if(!searchPhrase) searchPhrase = 'The Sign';
+function promptUser() {
+  Inquirer.prompt([
+    {
+      type: 'list',
+      message: 'What do you want to search for?',
+      choices: ['Song', 'Movie', 'Concert', 'Random'],
+      name: 'command'
+    },
+    {
+      type: 'input',
+      message: 'What are you looking for?',
+      name: 'searchPhrase',
+      when: (answers) => {return answers.command !== 'Random';}
+     }
+  ])
+  .then(function(answers) {
+    switch(answers.command) {
+      case 'Song':
+        command = 'spotify-this-song';
+        break;
+      case 'Movie':
+        command = 'movie-this';
+        break;
+      case 'Concert':
+        command = 'concert-this';
+        break;
+      case 'Random':
+        performRandomCommand();
+        return;
+      default:
+        break;
+    }
 
+    searchPhrase = answers.searchPhrase;
+    runLiri();
+  })
+}
+
+function runLiri() {
+  if(command === 'spotify-this-song') {
+    if(!searchPhrase) searchPhrase = 'The Sign';
+    searchSpotifyTrack(searchPhrase);
+
+  } else if (command === 'concert-this') {
+    if(!searchPhrase) searchPhrase = 'Tycho';
+    searchArtistConcerts(searchPhrase);
+
+  } else if (command === 'movie-this') {
+    if(!searchPhrase) searchPhrase = 'Mr. Nobody';
+    searchMovie(searchPhrase);
+
+  } 
+}
+
+function searchSpotifyTrack(searchPhrase) {
   spotify.search({ type: 'track', query: searchPhrase }, function(err, data) {
     if (err) {
-      return console.log('Error occurred: ' + err);
+      let message = 'Error occurred: ' + err;
+      console.log(message);
+      logMessage(message);
+      return;
     }
 
     if(data.tracks.items.length === 0) {
-      console.log('No track found with provided name.');
+      let message = 'No track found with name \"' + searchPhrase + '\".';
+      console.log(message);
+      logMessage(message);
       return;
     } else {
       printSpotifyTracks(data.tracks.items);
     }
     
   });
-} else if (command === 'concert-this') {
-  if(!searchPhrase) searchPhrase = 'Tycho';
-  
-  Request('https://rest.bandsintown.com/artists/' + searchPhrase + '/events?app_id=codingbootcamp', function (error, response, body) {
-    if(error && response.statusCode !== 200) return;
-    if( /warn=Not found/g.test(body) || /error=Not Found/g.test(body)) {
-      console.log('Artist not found.');
-    } else {
-      printConcerts(JSON.parse(body));
-    }
-  });
-} else if (command === 'movie-this') {
-  if(!searchPhrase) searchPhrase = 'Mr. Nobody';
-
-  Request('http://www.omdbapi.com/?apikey=trilogy&t=' + searchPhrase, function(error, response, body) {
-    if(error && response.statusCode !== 200) return;
-    let data = JSON.parse(body);
-    if(data.Response === 'False') {
-      console.log('Movie not found');
-    } else {
-      printMovie(data);
-    }
-
-  })
 }
  
-
- 
 function printSpotifyTracks(tracks) {
+  let message = '';
+
   for(let i = 0; i < tracks.length; i++) {
     let currentTrack = tracks[i];
-    console.log('Name:   ' + currentTrack.name);
-    console.log('Artist: ' + currentTrack.artists[0].name);
-    console.log('Album:  ' + currentTrack.album.name);
-    console.log('');  
+    let name = 'Name:   ' + currentTrack.name;
+    let artist = 'Artist: ' + currentTrack.artists[0].name;
+    let album = 'Album:  ' + currentTrack.album.name;
+
+    message += name + '\n' + artist + '\n' + album + '\n\n';
   }
+
+  console.log(message);
+  logMessage(message);
+}
+
+function searchArtistConcerts(searchPhrase) {
+  Request('https://rest.bandsintown.com/artists/' + searchPhrase + '/events?app_id=codingbootcamp', function (error, response, body) {
+      if(error && response.statusCode !== 200) return;
+      if( /warn=Not found/g.test(body) || /error=/g.test(body)) {
+        let message = 'Could not find any concerts for \"' + searchPhrase + '\".';
+        console.log(message);
+        logMessage(message);
+      } else {
+        printConcerts(JSON.parse(body));
+      }
+    });
 }
 
 function printConcerts(concerts) {
+  let message = '';
+
   for(let i = 0; i < concerts.length; i++) {
     let concert = concerts[i];
     let date = Moment(concert.datetime);
-    let lineup = '';
+    let lineup = 'Lineup:   ';
     concert.lineup.forEach((b, i, arr) => {
       
       if(i === arr.length - 1) {
@@ -82,22 +133,79 @@ function printConcerts(concerts) {
         lineup += b + ', ';
       }
       
-    })
-    console.log('Lineup:   ' + lineup);
-    console.log('Venue:    ' + concert.venue.name);
-    console.log('Location: '+ concert.venue.city + ', ' + concert.venue.region + ' ' + concert.venue.country);
-    console.log('Date:     ' + date.format('MM/DD/YYYY'));
-    console.log('');
+    });
+
+    let venue = 'Venue:    ' + concert.venue.name;
+    let location = 'Location: '+ concert.venue.city + ', ' + concert.venue.region + ' ' + concert.venue.country;
+    let dateString = 'Date:     ' + date.format('MM/DD/YYYY');
+
+    message += lineup + '\n' + venue + '\n' + location + '\n' + dateString + '\n\n';
+
+    
   }
+
+  console.log(message);
+  logMessage(message);
+}
+
+function searchMovie(searchPhrase) {
+  Request('http://www.omdbapi.com/?apikey=trilogy&t=' + searchPhrase, function(error, response, body) {
+      if(error && response.statusCode !== 200) return;
+      let data = JSON.parse(body);
+      if(data.Response === 'False') {
+        let message = 'Could not find movie \"' + searchPhrase + '\".';
+        console.log(message);
+        logMessage(message);
+      } else {
+        printMovie(data);
+      }
+  
+    });
 }
 
 function printMovie(movie) {
-  console.log('Title:    ' + movie.Title);
-  console.log('Year:     ' + movie.Year);
-  console.log('IMDB:     ' + movie.imdbRating);
-  console.log('RT:       ' + (movie.Ratings.filter(e => e.Source === 'Rotten Tomatoes'))[0].Value);
-  console.log('Country:  ' + movie.Country);
-  console.log('Language: ' + movie.Language);
-  console.log('Plot:     ' + movie.Plot);
-  console.log('Actors:   ' + movie.Actors);
+  let title = 'Title:    ' + movie.Title;
+  let year = 'Year:     ' + movie.Year;
+  let imdb = 'IMDB:     ' + movie.imdbRating;
+  let rt
+  if(movie.Ratings.filter(e => e.Source === 'Rotten Tomatoes').length > 0) {
+    rt = 'RT:       ' + (movie.Ratings.filter(e => e.Source === 'Rotten Tomatoes'))[0].Value;
+  }
+  
+  let country = 'Country:  ' + movie.Country;
+  let language = 'Language: ' + movie.Language;
+  let plot = 'Plot:     ' + movie.Plot;
+  let actors = 'Actors:   ' + movie.Actors;
+  
+  let message = title + '\n' + year + '\n' + imdb + '\n' ;
+  if(rt) message += rt + '\n';
+  message += country + '\n' + language + '\n' + plot + '\n' + actors + '\n';
+  console.log(message);
+  logMessage(message);
+}
+
+function performRandomCommand() {
+  fs.readFile('./random.txt', 'utf8', function(err, data) {
+    if(err) return console.log(err);
+
+    
+    let options = data.split('\r\n');
+    let random = Math.floor(Math.random() * options.length);
+    let randomCommand = options[random].split(',');
+
+    command = randomCommand[0];
+    searchPhrase = randomCommand[1];
+    runLiri();
+  });
+}
+
+function logMessage(msg) {
+  let currentTime = Moment();
+  let log = '======================================================\n';
+  log += currentTime.format('YYYY-MM-DD hh:mm:ss A') + ': ' + command + ' \"' + searchPhrase + '\"\n\n';
+  log += "Response:\n";
+  log += msg;
+  fs.appendFile('./log.txt', log, function(err) {
+    if (err) return console.log(err);
+  })
 }
