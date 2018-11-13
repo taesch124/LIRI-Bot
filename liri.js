@@ -99,7 +99,7 @@ function printSpotifyTracks(tracks) {
 }
 
 function searchArtistConcerts(searchPhrase) {
-  Request('https://rest.bandsintown.com/artists/' + searchPhrase + '/events?app_id=codingbootcamp', function (error, response, body) {
+  Request('https://rest.bandsintown.com/artists/' + searchPhrase + '/events?app_id=' + keys.bit, function (error, response, body) {
       if(error && response.statusCode !== 200) return;
       if( /warn=Not found/g.test(body) || /error=/g.test(body)) {
         let message = 'Could not find any concerts for \"' + searchPhrase + '\".';
@@ -142,7 +142,7 @@ function printConcerts(concerts) {
 }
 
 function searchMovie(searchPhrase) {
-  Request('http://www.omdbapi.com/?apikey=trilogy&t=' + searchPhrase, function(error, response, body) {
+  Request('http://www.omdbapi.com/?apikey=' + keys.omdb + '&t=' + searchPhrase, function(error, response, body) {
       if(error && response.statusCode !== 200) return;
       let data = JSON.parse(body);
       if(data.Response === 'False') {

@@ -431,3 +431,133 @@ Venue:    Accorhotels Arena
 Location: Paris,  France
 Date:     03/08/2019
 
+======================================================
+2018-11-13 12:43:46 AM: spotify-this-song "I Want it That Way"
+
+Response:
+Name:   I Want It That Way
+Artist: Backstreet Boys
+Album:  The Hits--Chapter One
+
+Name:   I Want It That Way
+Artist: Backstreet Boys
+Album:  Millennium
+
+Name:   I Want It That Way
+Artist: Anthem Lights
+Album:  Covers Part IV
+
+Name:   I Want It That Way
+Artist: Tyler and Mark
+Album:  Beautiful Dreams
+
+Name:   I Want It That Way
+Artist: Dynamite Boy
+Album:  Punk Goes Pop
+
+Name:   Ebay (Parody of "I Want It That Way" by the Backstreet Boys)
+Artist: "Weird Al" Yankovic
+Album:  Poodle Hat
+
+Name:   I Want It That Way
+Artist: Backstreet Boys
+Album:  90 Sweet 90s Hits!
+
+Name:   I Want It That Way
+Artist: Manuel Costa
+Album:  I Want It That Way
+
+Name:   I Want It That Way
+Artist: Backstreet Boys
+Album:  NKOTBSB
+
+Name:   I Want It That Way
+Artist: Boyce Avenue
+Album:  Cover Sessions, Vol. 2
+
+Name:   Bye Bye Bye / I Want It That Way (Glee Cast Version)
+Artist: Glee Cast
+Album:  Bye Bye Bye / I Want It That Way (Glee Cast Version)
+
+Name:   I Want It That Way
+Artist: Steel Panther
+Album:  I Want It That Way
+
+Name:   I Want It That Way
+Artist: Landon Austin & Julia Sheer
+Album:  I Want It That Way
+
+Name:   I Want It That Way
+Artist: Scary Pockets
+Album:  Nu Funk
+
+Name:   I Want It That Way
+Artist: Scott Bradlee's Postmodern Jukebox
+Album:  Selfies on Kodachrome
+
+Name:   Ebay (Parody of "I Want It That Way" by the Backstreet Boys)
+Artist: "Weird Al" Yankovic
+Album:  The Essential "Weird Al" Yankovic
+
+Name:   I Want It That Way
+Artist: Backstreet Boys
+Album:  NOW That's What I Call 90s Pop
+
+Name:   I Want It That Way
+Artist: The Cooltrane Quartet
+Album:  Cocktails & Dreams
+
+Name:   I Want It That Way
+Artist: #90s Update
+Album:  #90s Update
+
+Name:   I Want It That Way
+Artist: Scott Bradlee's Postmodern Jukebox
+Album:  PMJ Is For Lovers: The Love Song Collection
+
+======================================================
+2018-11-13 12:43:59 AM: movie-this "Saving Private Ryan"
+
+Response:
+Title:    Saving Private Ryan
+Year:     1998
+IMDB:     8.6
+RT:       93%
+Country:  USA
+Language: English, French, German, Czech
+Plot:     Following the Normandy Landings, a group of U.S. soldiers go behind enemy lines to retrieve a paratrooper whose brothers have been killed in action.
+Actors:   Tom Hanks, Tom Sizemore, Edward Burns, Barry Pepper
+======================================================
+2018-11-13 12:44:07 AM: concert-this "Drake"
+
+Response:
+Lineup:   Drake, Migos
+Venue:    AmericanAirlines Arena
+Location: Miami, FL United States
+Date:     11/13/2018
+
+Lineup:   Drake, Migos
+Venue:    AmericanAirlines Arena
+Location: Miami, FL United States
+Date:     11/14/2018
+
+Lineup:   Drake, Migos, Roy Woods
+Venue:    State Farm Arena
+Location: Atlanta, GA United States
+Date:     11/16/2018
+
+Lineup:   Drake, Migos, Roy Woods
+Venue:    State Farm Arena
+Location: Atlanta, GA United States
+Date:     11/17/2018
+
+Lineup:   Drake, Shakura S'aida, Mia Martina, Giada De Laurentiis, Jessie Reyez
+Venue:    Chateau Le Jardin Event Venue
+Location: Woodbridge,  Canada
+Date:     11/29/2018
+
+Lineup:   Drake
+Venue:    Accorhotels Arena
+Location: Paris,  France
+Date:     03/08/2019
+
