@@ -29,16 +29,29 @@ function promptUser() {
       when: (answers) => {return answers.command !== 'Random';}
      }
   ])
-  .then(function(answers) {
+  .then(runLiri);
+}
+
+function runLiri(answers) {
+  searchPhrase = answers.searchPhrase;
     switch(answers.command) {
       case 'Song':
+      case 'spotify-this-song':
         command = 'spotify-this-song';
+        if(!searchPhrase) searchPhrase = 'The Sign';
+        searchSpotifyTrack(searchPhrase);
         break;
       case 'Movie':
+      case 'movie-this':
         command = 'movie-this';
+        if(!searchPhrase) searchPhrase = 'Mr. Nobody';
+        searchMovie(searchPhrase);
         break;
       case 'Concert':
+      case 'concert-this':
         command = 'concert-this';
+        if(!searchPhrase) searchPhrase = 'Tycho';
+        searchArtistConcerts(searchPhrase);
         break;
       case 'Random':
         performRandomCommand();
@@ -46,26 +59,6 @@ function promptUser() {
       default:
         break;
     }
-
-    searchPhrase = answers.searchPhrase;
-    runLiri();
-  })
-}
-
-function runLiri() {
-  if(command === 'spotify-this-song') {
-    if(!searchPhrase) searchPhrase = 'The Sign';
-    searchSpotifyTrack(searchPhrase);
-
-  } else if (command === 'concert-this') {
-    if(!searchPhrase) searchPhrase = 'Tycho';
-    searchArtistConcerts(searchPhrase);
-
-  } else if (command === 'movie-this') {
-    if(!searchPhrase) searchPhrase = 'Mr. Nobody';
-    searchMovie(searchPhrase);
-
-  } 
 }
 
 function searchSpotifyTrack(searchPhrase) {
@@ -188,14 +181,14 @@ function performRandomCommand() {
   fs.readFile('./random.txt', 'utf8', function(err, data) {
     if(err) return console.log(err);
 
-    
+    let answers = {};
     let options = data.split('\r\n');
     let random = Math.floor(Math.random() * options.length);
     let randomCommand = options[random].split(',');
 
-    command = randomCommand[0];
-    searchPhrase = randomCommand[1];
-    runLiri();
+    answers.command = randomCommand[0];
+    answers.searchPhrase = randomCommand[1];
+    runLiri(answers);
   });
 }
 
